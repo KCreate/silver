@@ -50,6 +50,7 @@ var hasEvent = abc.hasEvent("myEvent"); // true
 
 ### Subscribe to an event
 ___subscribeToEvent(object, eventName, callback)___
+
 When you try to subscribe to an event that doesn't exist, the callback will be called immediately with the following content:
 ```json
 {
@@ -76,6 +77,7 @@ def.subscribeToEvent(abc, "myEvent", function(data) {
 
 ### Unsubscribing from an event
 ___unsubscribeFromEvent(object, eventName)___
+
 Unsubscribing from an event that doesn't exist, or you're not subscribed to in the first place, will return __false__. On success it will return __true__;
 ```javascript
 var abc = new Silver("abc");
@@ -119,6 +121,7 @@ The content of subscribers will be:
 
 ### Check if an object is subscribed to another
 ___isSubscribed(object, eventName)___
+
 This returns false if the object is not subscribed or if the event doesn't exist.
 ```javascript
 var abc = new Silver("abc");
@@ -133,6 +136,7 @@ var subscribed = def.isSubscribed(abc, "myEvent"); // true
 
 ### Fire an event
 ___fireEvent(eventName, parameters, callback)___
+
 The responses variable in the callback contains the responses that get returned in the ```subscribeToEvent``` method.
 ```javascript
 var abc = new Silver("abc");
