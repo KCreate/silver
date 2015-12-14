@@ -1,5 +1,7 @@
 # Silver
-__Silver__ is a fast, powerful and lightweight __1KB!__ event management library for node. It's written in plain Javascript, has __no dependencies__ and great documentation. Check out the example.js file included in this repository.
+__Silver__ is a fast, powerful and lightweight __1KB!__ event management library for node. It's written in plain Javascript, has __no dependencies__ and great documentation.
+
+For additional documentation, check out the example.js file included in this repository.
 
 # How to install
 ```
