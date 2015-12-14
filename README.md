@@ -118,7 +118,7 @@ The content of subscribers will be:
 ```
 
 ### Check if an object is subscribed to another
-#### isSubscribed(object, eventName)
+___isSubscribed(object, eventName)___
 This returns false if the object is not subscribed or if the event doesn't exist.
 ```javascript
 var abc = new Silver("abc");
@@ -132,7 +132,7 @@ var subscribed = def.isSubscribed(abc, "myEvent"); // true
 ```
 
 ### Fire an event
-#### fireEvent(eventName, parameters, callback)
+___fireEvent(eventName, parameters, callback)___
 The responses variable in the callback contains the responses that get returned in the ```subscribeToEvent``` method.
 ```javascript
 var abc = new Silver("abc");
