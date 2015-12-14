@@ -6,6 +6,7 @@ For additional documentation, check out the example.js file included in this rep
 NPM page: [silverjs](https://www.npmjs.com/package/silverjs)
 
 ### How to install
+
 ```sh
 npm install silverjs
 ```
@@ -98,6 +99,7 @@ def.unsubscribeFromEvent(abc, "myEvent");
 
 ### Get all subscribers for an event
 ___subscribersForEvent(eventName)___
+
 ```javascript
 var abc = new Silver("abc");
 var def = new Silver("def");
