@@ -1,25 +1,24 @@
-# Silver
+### Silver
 __Silver__ is a fast, powerful and lightweight __1KB!__ event management library for node. It's written in plain Javascript, has __no dependencies__ and great documentation.
 
 For additional documentation, check out the example.js file included in this repository.
 
 NPM page: [silverjs](https://www.npmjs.com/package/silverjs)
 
-# How to install
-```
+### How to install
+```sh
 npm install silverjs
 ```
-Once you've installed it with npm, you can compress it with gulp-uglify by just running gulp against the directory and then replacing the index.js with the compressed one in the newly created build directory. However this is not required.
-
-# Usage
-Below are some examples on how to use silver.
-
-### Import
 ```javascript
 var Silver = require('silverjs');
 ```
+Once you've installed it with npm, you can compress it with gulp-uglify by just running gulp against the directory and then replacing the index.js with the compressed one in the newly created build directory. However this is not required. You can also download it directly from github.
+
+___
 
 ### Creating a new silver object
+___new Silver()___
+
 You should always pass the same name you took for your variable into the Silver initializer. If you don't pass anything, Silver will just use the current ```Date.now()``` value.
 ```javascript
 var abc = new Silver("abc");
@@ -27,6 +26,7 @@ var abc = new Silver("abc");
 
 ### Add a new event
 ___addEvent(eventName)___
+
 ```javascript
 var abc = new Silver("abc");
 abc.addEvent("myEvent");
@@ -34,6 +34,7 @@ abc.addEvent("myEvent");
 
 ### Remove an event
 ___removeEvent(eventName)___
+
 ```javascript
 var abc = new Silver("abc");
 abc.addEvent("myEvent");
@@ -42,6 +43,7 @@ abc.removeEvent("myEvent");
 
 ### Check if an event exists
 ___hasEvent(eventName)___
+
 ```javascript
 var abc = new Silver("abc");
 abc.addEvent("myEvent");
