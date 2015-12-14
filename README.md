@@ -3,11 +3,13 @@ __Silver__ is a fast, powerful and lightweight __1KB!__ event management library
 
 For additional documentation, check out the example.js file included in this repository.
 
+NPM page: [silverjs](https://www.npmjs.com/package/silverjs)
+
 # How to install
 ```
 npm install silverjs
 ```
-Once you've installed it with npm, you can compress it with gulp-uglify by just running gulp against the directory. However this is not required.
+Once you've installed it with npm, you can compress it with gulp-uglify by just running gulp against the directory and then replacing the index.js with the compressed one in the newly created build directory. However this is not required.
 
 # Usage
 Below are some examples on how to use silver.
