@@ -4,6 +4,7 @@ __Silver__ is a fast, powerful and lightweight __1KB!__ event management library
 For additional documentation, check out the example.js file included in this repository.
 
 NPM page: [silverjs](https://www.npmjs.com/package/silverjs)
+
 Github page: [kcreate/silver](https://github.com/KCreate/silver)
 
 ### How to install
