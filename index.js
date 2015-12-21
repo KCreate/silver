@@ -28,7 +28,7 @@ THE SOFTWARE.
 module.exports = function(objectName) {
 	// Default value for the objectName
 	if (objectName===undefined) {
-		objectName = Date.now();
+		objectName = Date.now()+""; // make it a string
 	}
 
 	return {
@@ -40,16 +40,18 @@ module.exports = function(objectName) {
 						If the object is already subscribed, we need to find and replace it
 					*/
 					var alreadySubscribed = false;
-					object._events[eventName].subscribers.forEach(function (item, index, array) {
-						if (item.name === this.name) {
-							alreadySubscribed = true;
-							array[index] = {
-								object: this,
-								name: this.name,
-								callback: callback
-							};
+					object.subscribersForEvent(eventName).forEach(function (item, index, array) {
+						if (!alreadySubscribed) {
+							if (item.name === this.name) {
+								alreadySubscribed = true;
+								array[index] = {
+									object: this,
+									name: this.name,
+									callback: callback
+								};
+							}
 						}
-					});
+					}.bind(this));
 
 					/*
 						If the object isn't already subscribed, we can just push
