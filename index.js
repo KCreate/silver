@@ -35,11 +35,33 @@ module.exports = function(objectName) {
 		subscribeToEvent: function(object, eventName, callback){
 			if (object._isSilverObject) {
 				if (object._events[eventName]) {
-					object._events[eventName].subscribers.push({
-						object: this,
-						name: this.name,
-						callback: callback
+
+					/*
+						If the object is already subscribed, we need to find and replace it
+					*/
+					var alreadySubscribed = false;
+					object._events[eventName].subscribers.forEach(function (item, index, array) {
+						if (item.name === this.name) {
+							alreadySubscribed = true;
+							array[index] = {
+								object: this,
+								name: this.name,
+								callback: callback
+							};
+						}
 					});
+
+					/*
+						If the object isn't already subscribed, we can just push
+					*/
+					if (!alreadySubscribed) {
+						object._events[eventName].subscribers.push({
+							object: this,
+							name: this.name,
+							callback: callback
+						});
+					}
+
 				} else {
 					callback({
 						"error": {

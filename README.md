@@ -56,15 +56,6 @@ var hasEvent = abc.hasEvent("myEvent"); // true
 ### Subscribe to an event
 ___subscribeToEvent(object, eventName, callback)___
 
-When you try to subscribe to an event that doesn't exist, the callback will be called immediately with the following content:
-```json
-{
-	"error": {
-		"message":"An event called myEvent doesn't exist."
-	}
-}
-```
-
 To send data back to the caller of the event, return it in the callback
 ```javascript
 var abc = new Silver("abc");
@@ -79,6 +70,17 @@ def.subscribeToEvent(abc, "myEvent", function(data) {
 		return data+" world";
 });
 ```
+
+When you try to subscribe to an event that doesn't exist, the callback will be called immediately with the following content:
+```json
+{
+	"error": {
+		"message":"An event called myEvent doesn't exist."
+	}
+}
+```
+
+If the object already has a subscription, it will be __replaced__.
 
 ### Unsubscribing from an event
 ___unsubscribeFromEvent(object, eventName)___

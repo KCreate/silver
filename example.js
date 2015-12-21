@@ -83,6 +83,10 @@ var hasEvent = abc.hasEvent("myEvent"); // true
 
 	To send data back to the caller of the event, return it in the callback
 */
+
+/*
+	If the object already has a subscription, it will be replaced.
+*/
 var abc = new Silver("abc");
 var def = new Silver("def");
 
