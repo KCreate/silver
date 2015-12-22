@@ -1,3 +1,7 @@
+/*
+	This file tests if the library overwrites existing subscriptions or not.
+*/
+
 var Silver = require('./index.js');
 
 // create some objects
