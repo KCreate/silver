@@ -44,6 +44,15 @@ abc.addEvent("myEvent");
 abc.removeEvent("myEvent");
 ```
 
+Removing an event that has active subscriptions, will fire the callback with the following data:
+```json
+{
+	"error":{
+		"Event got removed while still being subscribed."
+	}
+}
+```
+
 ### Check if an event exists
 ___hasEvent(eventName)___
 
@@ -63,7 +72,7 @@ var def = new Silver("def");
 
 abc.addEvent("myEvent");
 def.subscribeToEvent(abc, "myEvent", function(data) {
-        if(data.err){
+        if(data.error){
 			// handle error
 		}
 
@@ -156,5 +165,31 @@ def.subscribeToEvent(abc, "myEvent", function(data){
 });
 abc.fireEvent("myEvent", "hello", function(responses) {
         // [ 'hello world' ]
+});
+```
+
+### Error handling
+Most of the time if an error happens, it will be reported via the callback specified in the subscribeToEvent method.
+
+An error report always looks like this:
+```json
+{
+	"error":{
+		"message":"Some error message..."
+	}
+}
+```
+
+You should aways check for a error object inside the callback method like that:
+```javascript
+var abc = new Silver("abc");
+var def = new Silver("def");
+
+abc.addEvent("myEvent");
+def.subscribeToEvent(abc, "myEvent", function(data) {
+    if (data.error){
+		// check the message here
+		console.log(data.error.message);
+	}
 });
 ```

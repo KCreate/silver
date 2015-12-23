@@ -42,11 +42,10 @@ module.exports = function(objectName) {
 					var alreadySubscribed = false;
 					object.subscribersForEvent(eventName).forEach(function (item, index, array) {
 						if (!alreadySubscribed) {
-							if (item.name === this.name) {
+							if (item.object.name === this.name) {
 								alreadySubscribed = true;
 								array[index] = {
 									object: this,
-									name: this.name,
 									callback: callback
 								};
 							}
@@ -59,7 +58,6 @@ module.exports = function(objectName) {
 					if (!alreadySubscribed) {
 						object._events[eventName].subscribers.push({
 							object: this,
-							name: this.name,
 							callback: callback
 						});
 					}
@@ -71,13 +69,19 @@ module.exports = function(objectName) {
 						}
 					});
 				}
+			} else {
+				callback({
+					"error": {
+						"message":"object is not a silver compatible."
+					}
+				});
 			}
 		},
 		unsubscribeFromEvent: function(object, eventName){
 			if (object._isSilverObject) {
 				if (object.hasEvent(eventName)) {
 					object._events[eventName].subscribers.forEach(function(subscriber){
-						if (subscriber.name == this.name) {
+						if (subscriber.object.name == this.name) {
 							var index = object._events[eventName].subscribers.indexOf(subscriber);
 							delete object._events[eventName].subscribers[index];
 							return true;
@@ -93,7 +97,7 @@ module.exports = function(objectName) {
 			if (object.hasEvent(eventName)) {
 				var match = false;
 				object._events[eventName].subscribers.forEach(function(subscriber) {
-					if (subscriber.name == this.name) {
+					if (subscriber.object.name == this.name) {
 						match = true;
 					}
 				}.bind(this));
@@ -112,7 +116,14 @@ module.exports = function(objectName) {
 		},
 		removeEvent: function(eventName){
 			if (this._events[eventName]) {
-				delete this._events[eventName];
+				// notify all subscribers, that the event is removed
+				this._events[eventName].subscribers.forEach(function(item, index, array){
+					item.callback({
+						"error":{
+							"message":"Event got removed while still being subscribed."
+						}
+					});
+				});
 			}
 		},
 		fireEvent: function(eventName, params, responseCallback){
