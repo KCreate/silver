@@ -169,6 +169,7 @@ abc.fireEvent("myEvent", "hello", function(responses) {
 ```
 
 ### Error handling
+
 Most of the time if an error happens, it will be reported via the callback specified in the subscribeToEvent method.
 
 An error report always looks like this:
