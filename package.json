@@ -1,22 +1,24 @@
 {
   "name": "silverjs",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Fast, powerful and lightweight event management library for node.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
-      "name":"Leonard Schuetz",
-      "email":"leni.schuetz@me.com",
-      "url":"http://leonardschuetz.ch/"
+    "name": "Leonard Schuetz",
+    "email": "leni.schuetz@me.com",
+    "url": "http://leonardschuetz.ch/"
   },
   "repository": {
-      "type":"git",
-      "url":"https://github.com/kcreate/silver.git"
+    "type": "git",
+    "url": "https://github.com/kcreate/silver.git"
   },
   "license": "MIT",
   "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1"
   }
 }

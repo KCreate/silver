@@ -1,7 +1,5 @@
 ### Silver
-__Silver__ is a fast, powerful and lightweight __1KB!__ event management library for node. It's written in plain Javascript, has __no dependencies__ and great documentation.
-
-For additional documentation, check out the example.js file included in this repository.
+__Silver__ is a fast, powerful and lightweight __1KB!__ event management library for node. It's written in plain Javascript and has __no dependencies__.
 
 NPM page: [silverjs](https://www.npmjs.com/package/silverjs)
 
@@ -10,12 +8,12 @@ Github page: [kcreate/silver](https://github.com/KCreate/silver)
 ### How to install
 
 ```sh
-npm install silverjs
+npm install --save silverjs
 ```
 ```javascript
 var Silver = require('silverjs');
 ```
-Once you've installed it with npm, you can compress it with gulp-uglify by just running gulp against the directory and then replacing the index.js with the compressed one in the newly created build directory. However this is not required. You can also download it directly from github.
+Once you've installed it with npm, you can compress it by just running gulp against the directory and then replacing the index.js with index.min.js. However this is not required.
 
 ___
 
@@ -44,7 +42,7 @@ abc.addEvent("myEvent");
 abc.removeEvent("myEvent");
 ```
 
-Removing an event that has active subscriptions, will fire the callback with the following data:
+Removing an event that has active subscriptions, will fire the callbacks of the subscribers with the following data:
 ```json
 {
 	"error":{

@@ -21,141 +21,295 @@ THE SOFTWARE.
 
 */
 
-/*
-	For documentation, look at the example.js file included in this package
-*/
+var Silver = function(name) {
+	/*
+		Default value for the name, casted to a string
+		This is used in several comparisons
 
-module.exports = function(objectName) {
-	// Default value for the objectName
-	if (objectName===undefined) {
-		objectName = Date.now()+""; // make it a string
+		Two silver objects shouldn't have the same name, or they will be treated as equal.
+		This may cause unexpected behaviour.
+
+		If the name passed is equal to any of the following:
+			- undefined
+			- null
+			- NaN
+			- "" or ''
+			- false
+			- true
+			- 0
+
+		it will be replaced by the current value of Date.now() casted to a string
+	*/
+	if (name !== undefined &&
+		name !== null &&
+		name !== NaN &&
+		name !== "" &&
+		name !== '' &&
+		name !== false &&
+		name !== true &&
+		name !== 0)
+	{
+		this.name = name;
+	} else {
+		this.name = Date.now()+"";
 	}
 
-	return {
-		subscribeToEvent: function(object, eventName, callback){
-			if (object._isSilverObject) {
-				if (object._events[eventName]) {
+	/*
+		Subscribing to an event
 
-					/*
-						If the object is already subscribed, we need to find and replace it
-					*/
-					var alreadySubscribed = false;
-					object.subscribersForEvent(eventName).forEach(function (item, index, array) {
-						if (!alreadySubscribed) {
-							if (item.object.name === this.name) {
-								alreadySubscribed = true;
-								array[index] = {
-									object: this,
-									callback: callback
-								};
-							}
-						}
-					}.bind(this));
+		subscribeToEvent takes 3 parameters:
+			- object
+			- eventName
+			- callback
 
-					/*
-						If the object isn't already subscribed, we can just push
-					*/
-					if (!alreadySubscribed) {
-						object._events[eventName].subscribers.push({
-							object: this,
-							callback: callback
-						});
-					}
+		The first is the object that own the event
+		The second is the name of the event
+		The third is the callback that's called when the event fires
 
-				} else {
-					callback({
-						"error": {
-							"message":"An event called myEvent doesn't exist."
-						}
-					});
-				}
+		To send data back to the owner of the event, return it in the callback
+
+		If the event doesn't exist, or the object is already subscribed,
+		it will return an error formated as specified in the error handling section in the REDME.md file.
+	*/
+	this.subscribeToEvent = function (object, eventName, callback) {
+
+		// check if object is a silver object
+		if (object._isSilverObject) {
+
+			// check if object owns an event called eventName
+			if (object.hasEvent(eventName)) {
+
+				// subscribe to the event, this will overwrite existing subscribtions
+				object._events[eventName].subscribers[this.name] = {
+					object: this,
+					callback: callback
+				};
+
 			} else {
+
+				// notify the callback that the event doesn't exist
 				callback({
 					"error": {
-						"message":"object is not a silver compatible."
+						"message":"An event called myEvent doesn't exist."
 					}
 				});
+
 			}
-		},
-		unsubscribeFromEvent: function(object, eventName){
-			if (object._isSilverObject) {
-				if (object.hasEvent(eventName)) {
-					object._events[eventName].subscribers.forEach(function(subscriber){
-						if (subscriber.object.name == this.name) {
-							var index = object._events[eventName].subscribers.indexOf(subscriber);
-							delete object._events[eventName].subscribers[index];
-							return true;
-						}
-					});
-					return false;
-				} else {
-					return false;
+
+		} else {
+
+			// notify the callback that the object is not compatible with silver
+			callback({
+				"error": {
+					"message":"object is not a silver compatible."
 				}
-			}
-		},
-		isSubscribed: function(object, eventName){
+			});
+
+		}
+	};
+
+	/*
+		Unsubscribing from an event
+
+		unsubscribeFromEvent takes 2 parameters
+			- object
+			- eventName
+
+		The first is the object that owns the event
+		The second is the name of the event
+	*/
+	this.unsubscribeFromEvent = function (object, eventName) {
+
+		// check if the object is a silver object
+		if (object._isSilverObject) {
+
+			// check if the object owns an event called eventName
 			if (object.hasEvent(eventName)) {
-				var match = false;
-				object._events[eventName].subscribers.forEach(function(subscriber) {
-					if (subscriber.object.name == this.name) {
-						match = true;
-					}
-				}.bind(this));
-				return match;
+
+				/*
+					The subscription is removed using the delete operator
+					It doesn't matter if the subscription didn't exist in the first place.
+				*/
+				delete object._events[eventName].subscribers[this.name];
+
 			}
-			return false;
-		},
-		addEvent: function(eventName){
-			if (!this._events[eventName]) {
+		}
+	};
+
+	/*
+		Checking if an object is subscribed to another
+
+		isSubscribed takes 2 parameters
+			- object
+			- eventName
+
+		The first is the object that fires the event
+		The second is the name of the event that has to be checked
+
+		This returns false if the object is not subscribed
+		or if the event doesn't exist.
+	*/
+	this.isSubscribed = function (object, eventName) {
+
+		// check if the object owns an event called eventName
+		if (object.hasEvent(eventName)) {
+			return (object._events[eventName].subscribers[this.name] !== undefined);
+		}
+		return false;
+	};
+
+	/*
+		Adding a new event
+
+		addEvent takes 1 parameter
+			- eventName
+
+		The first is the name of the new event
+
+		If you pass anything else than a string, it will return false
+		If the event already exists, it will remove all subscribers from the event
+
+		If the name passed is equal to any of the following:
+			- undefined
+			- null
+			- NaN
+			- "" or ''
+			- false
+			- true
+			- 0
+
+		it will return false
+	*/
+	this.addEvent = function (eventName) {
+		if (typeof eventName === 'string') {
+			if (name !== undefined &&
+				name !== null &&
+				name !== NaN &&
+				name !== "" &&
+				name !== '' &&
+				name !== false &&
+				name !== true &&
+				name !== 0)
+			{
 				this._events[eventName] = {
-					subscribers: []
+					subscribers: {}
 				};
 			} else {
 				return false;
 			}
-		},
-		removeEvent: function(eventName){
-			if (this._events[eventName]) {
-				// notify all subscribers, that the event is removed
-				this._events[eventName].subscribers.forEach(function(item, index, array){
-					item.callback({
+		} else {
+			return false;
+		}
+	};
+
+	/*
+		Remove an event
+
+		removeEvent takes 1 parameter
+			- eventName
+
+		The first is the name of the event you want to remove
+
+		Removing an event that has active subscribtions, will call the callback of the subscribers
+	*/
+	this.removeEvent = function (eventName) {
+
+		// check if the event exists
+		if (this.hasEvent(eventName)) {
+
+			// notify all subscribers, that the event is removed
+			var subscribers = this._events[eventName].subscribers;
+			for (var key in subscribers) {
+				if (subscribers.hasOwnProperty(key)) {
+					subscribers[key].callback({
 						"error":{
 							"message":"Event got removed while still being subscribed."
 						}
 					});
-				});
-			}
-		},
-		fireEvent: function(eventName, params, responseCallback){
-			if (this._isSilverObject) {
-				if (this._events[eventName]) {
-					var responses = [];
-					this._events[eventName].subscribers.forEach(function(subscriber) {
-						var subscriberResponse = subscriber.callback(params);
-						if (subscriberResponse !== undefined) {
-							responses.push(subscriberResponse);
-						}
-					});
-					responseCallback(responses);
-				} else {
-					return false;
 				}
 			}
-		},
-		subscribersForEvent: function(eventName){
-			if (this.hasEvent(eventName)) {
-				return this._events[eventName].subscribers;
-			}
-			return {};
-		},
-		_events: {},
-		hasEvent: function(eventName){
-			if (this._events[eventName]) {
-				return true;
-			}
-			return false;
-		},
-		name: objectName,
-		_isSilverObject: true
+		}
 	};
+
+	/*
+		Fire an event
+
+		fireEvent takes 3 parameters
+			- eventName
+			- params
+			- responseCallback
+
+		The first is the name of the event you want to fire
+		The second is the object that gets passed to all the subscribers
+		The third is a callback that gets all the responses from the subscribers
+
+		If the event doesn't exist this will return false
+	*/
+	this.fireEvent = function (eventName, params, responseCallback) {
+
+		// check if the event exists
+		if (this.hasEvent(eventName)) {
+
+			// run the callbacks and return the responses
+			var responses = {};
+			var subscribers = this._events[eventName].subscribers;
+			for (var key in subscribers) {
+				if (subscribers.hasOwnProperty(key)) {
+					var subscriberResponse = subscribers[key].callback(params);
+					if (subscriberResponse !== undefined) {
+						responses[subscribers[key].object.name] = subscriberResponse;
+					}
+				}
+			}
+
+			// if there were any responses, return them
+			if (responses !== []) {
+				responseCallback(responses);
+			}
+
+		} else {
+			return false;
+		}
+	};
+
+	/*
+		Get all subscribers for a local event
+
+		subscribersForEvent takes 1 parameter
+			- eventName
+
+		The first is the name of the event we want to get the subscribers for
+
+		If the event doesn't exist, this will return an empty object
+	*/
+	this.subscribersForEvent = function (eventName) {
+
+		// check if the event exists
+		if (this.hasEvent(eventName)) {
+			return this._events[eventName].subscribers;
+		} else {
+			return {};
+		}
+	};
+
+	/*
+		Check if an event exists
+
+		hasEvent takes 1 parameter
+			- eventName
+
+		The first is the name of the event
+	*/
+	this.hasEvent = function (eventName) {
+		return !!(this._events[eventName]);
+	};
+
+	/*
+		Internal stuff, don't mess with this directly
+	*/
+	this._events = {};
+	this._isSilverObject = true;
 };
+
+// export module
+module.exports = Silver;
