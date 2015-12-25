@@ -2,7 +2,7 @@
 	This file tests if the library overwrites existing subscriptions or not.
 */
 
-var Silver = require('./index.js');
+var Silver = require('../index.js');
 
 // create some objects
 var abc = new Silver('abc');
@@ -18,7 +18,7 @@ def.subscribeToEvent(abc, 'test', function (data) {
 
 // get all subscribers for the event
 var subscribers = abc.subscribersForEvent('test');
-if (subscribers.length == 1) {
+if (Object.keys(subscribers).length == 1) {
 	console.log("# Test 1 passed!");
 } else {
 	console.log("# Test 1 failed!");
@@ -31,7 +31,7 @@ def.subscribeToEvent(abc, 'test', function (data) {
 
 // get all subscribers for the event
 subscribers = abc.subscribersForEvent('test');
-if (subscribers.length == 1) {
+if (Object.keys(subscribers).length == 1) {
 	console.log("# Test 2 passed!");
 } else {
 	console.log("# Test 2 failed!");
