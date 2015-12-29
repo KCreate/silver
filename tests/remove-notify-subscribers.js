@@ -12,16 +12,20 @@ var ghi = new Silver('ghi');
 abc.addEvent('something');
 
 def.subscribeToEvent(abc, 'something', function (data) {
-	console.log("# Subscriber 1 called.");
 	if (data.error) {
-		console.log("# First error passed.");
+		console.log("# Test 1 passed.");
 	}
 });
 ghi.subscribeToEvent(abc, 'something', function (data) {
-	console.log("# Subscriber 2 called.");
 	if (data.error) {
-		console.log("# Second error passed.");
+		console.log("# Test 2 passed.");
 	}
 });
 
 abc.removeEvent('something');
+
+if (!abc.hasEvent('something')) {
+	console.log("# Test 3 passed.");
+} else {
+	console.log("# Test 3 failed.");
+}

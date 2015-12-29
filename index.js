@@ -214,14 +214,18 @@ var Silver = function(name) {
 	/*
 		Remove an event
 
-		removeEvent takes 1 parameter
+		removeEvent takes 2 parameters
 			- eventName
+			- reason
 
 		The first is the name of the event you want to remove
+		The second is a custom error object that is being passed internally, you may not want to use that
 
-		Removing an event that has active subscribtions, will call the callback of the subscribers
+		Removing an event that has active subscribtions, will call the callback of the subscribers.
+
+		Setting a custom reason, may be dangerous as most subscribers expect a error.message value.
 	*/
-	this.removeEvent = function (eventName) {
+	this.removeEvent = function (eventName, reason) {
 
 		// check if the event exists
 		if (this.hasEvent(eventName)) {
@@ -230,13 +234,24 @@ var Silver = function(name) {
 			var subscribers = this._events[eventName].subscribers;
 			for (var key in subscribers) {
 				if (subscribers.hasOwnProperty(key)) {
-					subscribers[key].callback({
+
+					var errorObject = {
 						"error":{
 							"message":"Event got removed while still being subscribed."
 						}
-					});
+					}
+
+					// If a reason is given, use that
+					if (reason) {
+						errorObject.error = reason;
+					}
+
+					subscribers[key].callback(errorObject);
 				}
 			}
+
+			// Remove the event
+			delete this._events[eventName];
 		}
 
 		// Chainability
@@ -318,6 +333,51 @@ var Silver = function(name) {
 	this.hasEvent = function (eventName) {
 		return !!(this._events[eventName]);
 	};
+
+	/*
+		Transfer an event to another
+
+		transferEvent takes 3 parameters
+			- object
+			- eventName
+			- keepSubscriptions
+			- overwriteExisting
+
+		The first is the object the event get's transfered to
+		The second is the name of the event that get's transfered
+		The third is a boolean, which if true, removes all subscriptions on the event
+		The fourth is a boolean, which if true, overwrites existing events with the same name on the new object
+	*/
+	this.transferEvent = function(object, eventName, keepSubscriptions, overwriteExisting) {
+
+		// Check if the event exists
+		if (this.hasEvent(eventName)) {
+
+			// Check if the new object doesn't already have the event
+			// Ignored if overwriteExisting is set to true
+			if (!object.hasEvent(eventName || overwriteExisting)) {
+
+				// Create the new event on the new object
+				object.addEvent(eventName);
+
+				// Transfer all the subscribers
+				if (keepSubscriptions) {
+					object._events[eventName].subscribers = this.subscribersForEvent(eventName);
+				}
+
+				// Remove it from the
+				this.removeEvent(eventName, {
+					message: "Event got transfered to another object",
+					newObject: object
+				});
+
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 
 	/*
 		Internal stuff, don't mess with this directly

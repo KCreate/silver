@@ -51,6 +51,8 @@ Removing an event that has active subscriptions, will fire the callbacks of the 
 }
 ```
 
+___removeEvent___ also takes a second parameter, but it's only used internally.
+
 ### Check if an event exists
 ___hasEvent(eventName)___
 
@@ -164,6 +166,36 @@ def.subscribeToEvent(abc, "myEvent", function(data){
 abc.fireEvent("myEvent", "hello", function(responses) {
         // [ 'hello world' ]
 });
+```
+
+### Transfering an event
+___transferEvent(object, eventName, keepSubscriptions, overwriteExisting)___
+
+This transfer an event from the owner to a new object. If __keepSubscriptions__ is set to true, all subscriptions will be transfered over. If they are being removed, all callbacks will receive an error with the following content:
+```json
+{
+	"message":"Event got transfered to another object",
+	"newObject":object
+}
+```
+
+If __overwriteExisting__ is set to true, it will overwrite an existing event with the same name on the new object.
+
+### Chainability
+
+You can also chain most methods with each other. So for example if you'd wanted to add a new event and then immediately check if it really got created, you could write that like this:
+```javascript
+var abc = new Silver('abc');
+var exists = abc.addEvent('test').hasEvent('test');
+// -> true
+```
+
+Or if you want to fire an event and then immediately remove it afterwards
+```javascript
+abc.fireEvent('test', "world", function(response) {
+	// your code goes here
+}).removeEvent('test');
+// -> abc does not have the event 'test' anymore
 ```
 
 ### Error handling
