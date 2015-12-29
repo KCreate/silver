@@ -23,38 +23,6 @@ THE SOFTWARE.
 
 var Silver = function(name) {
 	/*
-		Default value for the name, casted to a string
-		This is used in several comparisons
-
-		Two silver objects shouldn't have the same name, or they will be treated as equal.
-		This may cause unexpected behaviour.
-
-		If the name passed is equal to any of the following:
-			- undefined
-			- null
-			- NaN
-			- "" or ''
-			- false
-			- true
-			- 0
-
-		it will be replaced by the current value of Date.now() casted to a string
-	*/
-	if (name !== undefined &&
-		name !== null &&
-		name !== NaN &&
-		name !== "" &&
-		name !== '' &&
-		name !== false &&
-		name !== true &&
-		name !== 0)
-	{
-		this.name = name;
-	} else {
-		this.name = Date.now()+"";
-	}
-
-	/*
 		Subscribing to an event
 
 		subscribeToEvent takes 3 parameters:
@@ -188,21 +156,17 @@ var Silver = function(name) {
 	*/
 	this.addEvent = function (eventName) {
 		if (typeof eventName === 'string') {
-			if (name !== undefined &&
-				name !== null &&
-				name !== NaN &&
-				name !== "" &&
-				name !== '' &&
-				name !== false &&
-				name !== true &&
-				name !== 0)
-			{
-				this._events[eventName] = {
-					subscribers: {}
-				};
+			if (this._acceptedInput(eventName)) {
+				if (!this.hasEvent(eventName)) {
+					this._events[eventName] = {
+						subscribers: {}
+					};
 
-				// Chainability
-				return this;
+					// Chainability
+					return this;
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
@@ -289,9 +253,11 @@ var Silver = function(name) {
 				}
 			}
 
-			// if there were any responses, return them
-			if (responses !== []) {
-				responseCallback(responses);
+			// if there were any responses and responseCallback is set, return them
+			if (responseCallback) {
+				if (responses !== []) {
+					responseCallback(responses);
+				}
 			}
 
 			// Chainability
@@ -345,32 +311,63 @@ var Silver = function(name) {
 
 		The first is the object the event get's transfered to
 		The second is the name of the event that get's transfered
-		The third is a boolean, which if true, removes all subscriptions on the event
+		The third is a boolean, which if true, keeps all subscriptions on the event
 		The fourth is a boolean, which if true, overwrites existing events with the same name on the new object
 	*/
 	this.transferEvent = function(object, eventName, keepSubscriptions, overwriteExisting) {
+
+		// Default values
+		keepSubscriptions = keepSubscriptions || true;
+		overwriteExisting = overwriteExisting || true;
 
 		// Check if the event exists
 		if (this.hasEvent(eventName)) {
 
 			// Check if the new object doesn't already have the event
 			// Ignored if overwriteExisting is set to true
-			if (!object.hasEvent(eventName || overwriteExisting)) {
+			if (!object.hasEvent(eventName) || overwriteExisting) {
+
+				// If subscriptions should be kept, copy the old ones to the new one and try to merge them
+				var oldSubscribers = {};
+				if (keepSubscriptions) {
+					oldSubscribers = object.subscribersForEvent(eventName);
+				}
+
+				// If the event already exists, delete it first
+				object.removeEvent(eventName, {
+					message: "Event got replaced by another",
+					newObject: object
+				});
 
 				// Create the new event on the new object
 				object.addEvent(eventName);
 
-				// Transfer all the subscribers
+				// Transfer all the subscribtions, new ones will overwrite old ones
 				if (keepSubscriptions) {
-					object._events[eventName].subscribers = this.subscribersForEvent(eventName);
+
+					// Copy old subscriptions
+					for (var key in oldSubscribers) {
+						if (oldSubscribers.hasOwnProperty(key)) {
+							object._events[eventName].subscribers[key] = oldSubscribers[key];
+						}
+					}
+
+					// Copy new subscriptions
+					for (var key in this.subscribersForEvent(eventName)) {
+						if (this.subscribersForEvent(eventName).hasOwnProperty(key)) {
+							object._events[eventName].subscribers[key] = this.subscribersForEvent(eventName)[key];
+						}
+					}
 				}
 
-				// Remove it from the
+				// Remove it from the current object
 				this.removeEvent(eventName, {
 					message: "Event got transfered to another object",
 					newObject: object
 				});
 
+				// Chainability
+				return this;
 			} else {
 				return false;
 			}
@@ -382,8 +379,49 @@ var Silver = function(name) {
 	/*
 		Internal stuff, don't mess with this directly
 	*/
+	this._acceptedInput = function(string) {
+		if (string !== undefined &&
+			string !== null &&
+			string !== NaN &&
+			string !== "" &&
+			string !== '' &&
+			string !== false &&
+			string !== true &&
+			string !== 0)
+		{
+			return true;
+		} else {
+			return false;
+		}
+	}
 	this._events = {};
 	this._isSilverObject = true;
+
+	/*
+		Config
+
+		Default value for the name, casted to a string
+		This is used in several comparisons
+
+		Two silver objects shouldn't have the same name, or they will be treated as equal.
+		This may cause unexpected behaviour.
+
+		If the name passed is equal to any of the following:
+			- undefined
+			- null
+			- NaN
+			- "" or ''
+			- false
+			- true
+			- 0
+
+		it will be replaced by the current value of Date.now() casted to a string
+	*/
+	if (this._acceptedInput(name)) {
+		this.name = name;
+	} else {
+		this.name = Date.now()+"";
+	}
 };
 
 // export module

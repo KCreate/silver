@@ -18,7 +18,7 @@ Once you've installed it with npm, you can compress it by just running gulp agai
 ___
 
 ### Creating a new silver object
-___new Silver()___
+___new Silver(name = Date.now()+"")___
 
 You should always pass the same name you took for your variable into the Silver initializer. If you don't pass anything, Silver will just use the current ```Date.now()``` value.
 ```javascript
@@ -179,7 +179,7 @@ This transfer an event from the owner to a new object. If __keepSubscriptions__ 
 }
 ```
 
-If __overwriteExisting__ is set to true, it will overwrite an existing event with the same name on the new object.
+If __overwriteExisting__ is set to true, it will overwrite an existing event with the same name on the new object. If __keepSubscriptions__ and __overwriteExisting__ are both set to true, Silver will try to merge all subscriptions into one event. If an object is subcribed to both events, the subscription to the overwritten event will be removed.
 
 ### Chainability
 

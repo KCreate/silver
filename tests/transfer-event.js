@@ -6,13 +6,21 @@ var Silver = require('../index.js');
 
 var abc = new Silver('abc');
 var def = new Silver('def');
+var ghi = new Silver('ghi');
 
 // Create a new event
 abc.addEvent('test1');
+def.addEvent('test1');
 
 // Subscribe to the event
 def.subscribeToEvent(abc, 'test1', function(data) {
 	return "hello " + data;
+})
+def.subscribeToEvent(def, 'test1', function(data) {
+	return "goodbye " + data;
+})
+ghi.subscribeToEvent(abc, 'test1', function(data) {
+	return "welcome " + data;
 })
 
 // Transfer the event
@@ -26,7 +34,7 @@ if (def.hasEvent('test1') && !abc.hasEvent('test1')) {
 }
 
 def.fireEvent('test1', "world", function(responses) {
-	if (responses.def == "hello world") {
+	if (responses.def == "hello world" && responses.ghi == "welcome world") {
 		console.log("# Test 2 passed");
 	} else {
 		console.log("# Test 2 failed");

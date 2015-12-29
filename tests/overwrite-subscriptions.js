@@ -19,9 +19,9 @@ def.subscribeToEvent(abc, 'test', function (data) {
 // get all subscribers for the event
 var subscribers = abc.subscribersForEvent('test');
 if (Object.keys(subscribers).length == 1) {
-	console.log("# Test 1 passed!");
+	console.log("# Test 1 passed");
 } else {
-	console.log("# Test 1 failed!");
+	console.log("# Test 1 failed");
 }
 
 // try to overwrite the last subscription
@@ -32,7 +32,7 @@ def.subscribeToEvent(abc, 'test', function (data) {
 // get all subscribers for the event
 subscribers = abc.subscribersForEvent('test');
 if (Object.keys(subscribers).length == 1) {
-	console.log("# Test 2 passed!");
+	console.log("# Test 2 passed");
 } else {
-	console.log("# Test 2 failed!");
+	console.log("# Test 2 failed");
 }
