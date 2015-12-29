@@ -224,3 +224,7 @@ def.subscribeToEvent(abc, "myEvent", function(data) {
 	}
 });
 ```
+
+### License
+
+This library is licensed under the [MIT License](https://opensource.org/licenses/MIT).

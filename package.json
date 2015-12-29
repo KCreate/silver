@@ -1,6 +1,6 @@
 {
   "name": "silverjs",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "Fast, powerful and lightweight event management library for node.",
   "main": "index.js",
   "scripts": {
