@@ -106,6 +106,9 @@ var Silver = function(name) {
 			});
 
 		}
+
+		// Chainability
+		return this;
 	};
 
 	/*
@@ -134,6 +137,9 @@ var Silver = function(name) {
 
 			}
 		}
+
+		// Chainability
+		return this;
 	};
 
 	/*
@@ -153,7 +159,7 @@ var Silver = function(name) {
 
 		// check if the object owns an event called eventName
 		if (object.hasEvent(eventName)) {
-			return (object._events[eventName].subscribers[this.name] !== undefined);
+			return (object.subscribersForEvent(eventName)[this.name] !== undefined);
 		}
 		return false;
 	};
@@ -194,6 +200,9 @@ var Silver = function(name) {
 				this._events[eventName] = {
 					subscribers: {}
 				};
+
+				// Chainability
+				return this;
 			} else {
 				return false;
 			}
@@ -229,6 +238,9 @@ var Silver = function(name) {
 				}
 			}
 		}
+
+		// Chainability
+		return this;
 	};
 
 	/*
@@ -266,6 +278,9 @@ var Silver = function(name) {
 			if (responses !== []) {
 				responseCallback(responses);
 			}
+
+			// Chainability
+			return this;
 
 		} else {
 			return false;

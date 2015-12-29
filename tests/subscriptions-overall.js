@@ -2,7 +2,7 @@
 	This is a test file for to test if all the basic subsription methods work
 */
 
-var Silver = require('../index.min.js');
+var Silver = require('../index.js');
 
 var abc = new Silver('abc');
 var def = new Silver('def');
@@ -17,6 +17,12 @@ def.subscribeToEvent(abc, 'test', function (data) {
 
 	return "hello " + data + "!";
 });
+
+if (def.isSubscribed(abc, 'test')) {
+	console.log("# Test 1 passed");
+} else {
+	console.log("# Test 1 failed");
+}
 
 ghi.subscribeToEvent(abc, 'test', function (data) {
 	if (data.error) {
@@ -33,9 +39,9 @@ abc.fireEvent('test', "world", function (responses) {
 	};
 
 	if (responses.def == expexted.def && responses.ghi == expexted.ghi) {
-		console.log("# Test 1 passed");
+		console.log("# Test 2 passed");
 	} else {
-		console.log("# Test 1 failed");
+		console.log("# Test 2 failed");
 	}
 });
 
