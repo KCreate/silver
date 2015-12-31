@@ -233,6 +233,9 @@ var Silver = function(name) {
 				this.removeEvent(eventName);
 			}
 		}
+
+		// Chainability
+		return this;
 	}
 
 	/*
@@ -312,6 +315,15 @@ var Silver = function(name) {
 	this.hasEvent = function (eventName) {
 		return !!(this._events[eventName]);
 	};
+
+	/*
+		Get a list of all events an object has
+
+		events takes 0 parameters
+	*/
+	this.events = function() {
+		return Object.keys(this._events);
+	}
 
 	/*
 		Transfer an event to another
