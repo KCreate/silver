@@ -11,10 +11,6 @@ var ghi = new Silver('ghi');
 abc.addEvent('test');
 
 def.subscribeToEvent(abc, 'test', function (data) {
-	if (data.error) {
-		console.log(data.error);
-	}
-
 	return "hello " + data + "!";
 });
 
@@ -25,10 +21,6 @@ if (def.isSubscribed(abc, 'test')) {
 }
 
 ghi.subscribeToEvent(abc, 'test', function (data) {
-	if (data.error) {
-		console.log(data.error);
-	}
-
 	return "goodbye " + data + "!";
 });
 
@@ -45,4 +37,20 @@ abc.fireEvent('test', "world", function (responses) {
 	}
 });
 
-abc.removeEvent('something');
+abc.removeEvent('test');
+if (!abc.hasEvent('test')) {
+	console.log('# Test 3 passed');
+} else {
+	console.log('# Test 3 failed');
+}
+
+abc.addEvent('test1');
+abc.addEvent('test2');
+
+abc.removeAllEvents();
+
+if (!abc.hasEvent('test1') && !abc.hasEvent('test2')) {
+	console.log('# Test 4 passed');
+} else {
+	console.log('# Test 4 failed');
+}

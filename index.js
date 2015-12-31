@@ -223,6 +223,19 @@ var Silver = function(name) {
 	};
 
 	/*
+		Remove all events at once
+
+		removeAllEvents takes 0 parameters
+	*/
+	this.removeAllEvents = function() {
+		for (var eventName in this._events) {
+			if (this._events.hasOwnProperty(eventName)) {
+				this.removeEvent(eventName);
+			}
+		}
+	}
+
+	/*
 		Fire an event
 
 		fireEvent takes 3 parameters
