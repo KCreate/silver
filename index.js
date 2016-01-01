@@ -381,7 +381,7 @@ var Silver = function(name) {
 
 				// If the event already exists, delete it first
 				object.removeEvent(eventName, {
-					message: "Event got replaced by another",
+					message: "Event got transfered to another object",
 					newObject: object
 				});
 

@@ -11,10 +11,12 @@ def.subscribeToEvent(abc, 'test1', function(data) {})
 def.subscribeToEvent(abc, 'test2', function(data) {})
 ghi.subscribeToEvent(abc, 'test2', function(data) {})
 
-console.log(abc.subscribersForEvent('test1'));
-console.log(abc.subscribersForEvent('test2'));
+def.unsubscribeFromAllEvents(abc);
+ghi.unsubscribeFromAllEvents(abc);
 
-if (0 == 0) {
+if (
+	Object.keys(abc.subscribersForEvent('test1')).length == 0 && Object.keys(abc.subscribersForEvent('test2')).length == 0
+) {
 	console.log('# Test 1 passed');
 } else {
 	console.log('# Test 1 failed');
