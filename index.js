@@ -111,6 +111,27 @@ var Silver = function(name) {
 	};
 
 	/*
+		Unsubscribe from all events on the object
+
+		unsubscribeFromAllEvents takes 1 parameters
+			- object
+
+		The first is the object that owns all the events
+	*/
+	this.unsubscribeFromAllEvents = function(object) {
+		// Iterate over every event
+		object.events().forEach(function(item, index, array) {
+			for (var subscriber in object.subscribersForEvent(item)) {
+				if (object.subscribersForEvent(item).hasOwnProperty(subscriber)) {
+					if (subscriber == this.name) {
+						this.unsubscribeFromEvent(object, item);
+					}
+				}
+			}
+		}.bind(this));
+	}
+
+	/*
 		Checking if an object is subscribed to another
 
 		isSubscribed takes 2 parameters
