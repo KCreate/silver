@@ -168,6 +168,11 @@ abc.fireEvent("myEvent", "hello", function(responses) {
 });
 ```
 
+### Get all events an object has
+___events()___
+
+The events method returns an array of all events an object has.
+
 ### Transfering an event
 ___transferEvent(object, eventName, keepSubscriptions, overwriteExisting)___
 

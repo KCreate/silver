@@ -1,6 +1,9 @@
-/*
-	This is a test file for to test if all the basic subsription methods work
-*/
+console.log([
+    '',
+    '# subscribtions-overall.js',
+    '\t- Testing overall subscription methods',
+    '\t- 4 Tests'
+].join('\n'));
 
 var Silver = require('../index.js');
 

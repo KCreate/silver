@@ -1,3 +1,10 @@
+console.log([
+    '',
+    '# listOfEventNames.js',
+    '\t- Testing if we can successfully get a list of all events on an object',
+    '\t- 1 Test'
+].join('\n'));
+
 var Silver = require('../index.js');
 
 var abc = new Silver('abc');

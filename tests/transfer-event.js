@@ -1,6 +1,9 @@
-/*
-	This tests if event transfering works
-*/
+console.log([
+    '',
+    '# transfer-event.js',
+    '\t- Testing if the event transfering logic works',
+    '\t- 2 Tests'
+].join('\n'));
 
 var Silver = require('../index.js');
 

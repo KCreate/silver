@@ -1,6 +1,9 @@
-/*
-	This is a test file to test chainability on all supported methods
-*/
+console.log([
+    '',
+    '# chainability.js',
+    '\t- Testing if chainability works.',
+    '\t- 3 Tests'
+].join('\n'));
 
 var Silver = require('../index.js');
 

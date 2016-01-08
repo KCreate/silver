@@ -1,3 +1,10 @@
+console.log([
+    '',
+    '# unsubscribeFromAllEvents.js',
+    '\t- Testing if the unsubscribeFromAllEvents method works.',
+    '\t- 1 Test'
+].join('\n'));
+
 var Silver = require('../index.js');
 
 var abc = new Silver('abc');

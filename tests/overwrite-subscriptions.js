@@ -1,6 +1,9 @@
-/*
-	This file tests if the library overwrites existing subscriptions or not.
-*/
+console.log([
+    '',
+    '# overwrite-subscriptions.js',
+    '\t- Testing if subscriptions can be overwritten',
+    '\t- 2 Tests'
+].join('\n'));
 
 var Silver = require('../index.js');
 

@@ -1,7 +1,9 @@
-/*
-	This is a test file for the feature that the removeEvent function,
-	notifies all subscribers of an event that the event has been removed.
-*/
+console.log([
+    '',
+    '# remove-notify-subscribers.js',
+    '\t- Testing if subscribers get notified when the event get\'s removed.',
+    '\t- 3 Tests'
+].join('\n'));
 
 var Silver = require('../index.js');
 
